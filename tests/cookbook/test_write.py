@@ -313,7 +313,7 @@ def test_csv_write_no_headers(tmp_path, with_morsel_size):
     assert all(x == y for x, y in zip(read_back.values(), data.values()))
 
 
-def test_csv_write_with_other_delimiter(tmp_path, with_morsel_size):
+def test_csv_write_with_delimiter(tmp_path, with_morsel_size):
     data = {"x": [1, 2, 3], "y": ["a", "b", "c"]}
 
     output_files = daft.from_pydict(data).write_csv(tmp_path, delimiter="|")

@@ -638,6 +638,8 @@ impl LogicalPlanBuilder {
         partition_cols: Option<Vec<ExprRef>>,
         compression: Option<String>,
         io_config: Option<IOConfig>,
+        headers: Option<bool>,
+        delimiter: Option<String>,
     ) -> DaftResult<Self> {
         let expr_resolver = ExprResolver::default();
 
@@ -652,6 +654,8 @@ impl LogicalPlanBuilder {
             partition_cols,
             compression,
             io_config,
+            headers,
+            delimiter,
         ));
 
         let logical_plan: LogicalPlan =
@@ -1154,7 +1158,9 @@ impl PyLogicalPlanBuilder {
         file_format,
         partition_cols=None,
         compression=None,
-        io_config=None
+        io_config=None,
+        headers=None,
+        delimiter=None,
     ))]
     pub fn table_write(
         &self,
@@ -1164,6 +1170,9 @@ impl PyLogicalPlanBuilder {
         partition_cols: Option<Vec<PyExpr>>,
         compression: Option<String>,
         io_config: Option<common_io_config::python::IOConfig>,
+        headers: Option<bool>,
+        delimiter: Option<String>
+        // write_options: Option<&pyo3::Py<pyo3::PyAny>>,
     ) -> PyResult<Self> {
         Ok(self
             .builder
@@ -1174,6 +1183,9 @@ impl PyLogicalPlanBuilder {
                 partition_cols.map(pyexprs_to_exprs),
                 compression,
                 io_config.map(|cfg| cfg.config),
+                headers,
+                delimiter,
+                // write_options,
             )?
             .into())
     }

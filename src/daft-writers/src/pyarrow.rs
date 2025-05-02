@@ -59,6 +59,9 @@ impl PyArrowWriter {
         file_idx: usize,
         io_config: Option<&daft_io::IOConfig>,
         partition_values: Option<&RecordBatch>,
+        headers: Option<bool>,
+        delimiter: Option<String>,
+        // write_options: Option<&pyo3::Py<pyo3::PyAny>>,
     ) -> DaftResult<Self> {
         Python::with_gil(|py| {
             let file_writer_module = py.import(pyo3::intern!(py, "daft.io.writer"))?;
@@ -82,6 +85,9 @@ impl PyArrowWriter {
                 io_config.map(|cfg| daft_io::python::IOConfig {
                     config: cfg.clone(),
                 }),
+                headers,
+                delimiter,
+                // write_options,
             ))?;
             Ok(Self {
                 py_writer: py_writer.into(),

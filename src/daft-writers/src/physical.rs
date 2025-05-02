@@ -42,6 +42,9 @@ impl WriterFactory for PhysicalWriterFactory {
                     self.output_file_info.io_config.as_ref(),
                     self.output_file_info.file_format,
                     partition_values,
+                    self.output_file_info.headers,
+                    self.output_file_info.delimiter.clone(),
+                    // self.output_file_info.write_options,
                 )?;
                 Ok(writer)
             }
@@ -56,6 +59,9 @@ pub fn create_pyarrow_file_writer(
     io_config: Option<&daft_io::IOConfig>,
     format: FileFormat,
     partition: Option<&RecordBatch>,
+    // write_options: Option<&pyo3::Py<pyo3::PyAny>>,
+    headers: Option<bool>,
+    delimiter: Option<String>,
 ) -> DaftResult<Box<dyn FileWriter<Input = Arc<MicroPartition>, Result = Option<RecordBatch>>>> {
     match format {
         #[cfg(feature = "python")]
@@ -68,7 +74,7 @@ pub fn create_pyarrow_file_writer(
         )?)),
         #[cfg(feature = "python")]
         FileFormat::Csv => Ok(Box::new(crate::pyarrow::PyArrowWriter::new_csv_writer(
-            root_dir, file_idx, io_config, partition,
+            root_dir, file_idx, io_config, partition, headers, delimiter,
         )?)),
         _ => Err(DaftError::ComputeError(
             "Unsupported file format for physical write".to_string(),

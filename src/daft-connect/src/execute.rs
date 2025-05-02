@@ -183,8 +183,16 @@ impl ConnectSession {
                     )
                 })?;
 
-                let plan =
-                    plan.table_write(&path, write_mode, file_format, None, None, Some(io_config))?;
+                let plan = plan.table_write(
+                    &path,
+                    write_mode,
+                    file_format,
+                    None,
+                    None,
+                    Some(io_config),
+                    None,
+                    None,
+                )?;
 
                 let mut result_stream = this.run_query(plan).await?;
 

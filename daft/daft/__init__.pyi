@@ -1850,6 +1850,8 @@ class LogicalPlanBuilder:
         partition_cols: list[PyExpr] | None = None,
         compression: str | None = None,
         io_config: IOConfig | None = None,
+        headers: bool | None = None,
+        delimiter: str | None = None,
     ) -> LogicalPlanBuilder: ...
     def iceberg_write(
         self,

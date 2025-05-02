@@ -858,6 +858,8 @@ fn physical_plan_to_partition_tasks(
                     partition_cols,
                     compression,
                     io_config,
+                    headers,
+                    delimiter,
                 },
             input,
         }) => tabular_write(
@@ -881,6 +883,8 @@ fn physical_plan_to_partition_tasks(
                     partition_cols,
                     compression,
                     io_config,
+                    headers,
+                    delimiter,
                 },
             input,
         }) => tabular_write(
@@ -904,6 +908,8 @@ fn physical_plan_to_partition_tasks(
                     partition_cols,
                     compression,
                     io_config,
+                    headers,
+                    delimiter,
                 },
             input,
         }) => tabular_write(

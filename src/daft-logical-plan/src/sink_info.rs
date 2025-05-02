@@ -27,6 +27,9 @@ pub struct OutputFileInfo {
     pub partition_cols: Option<Vec<ExprRef>>,
     pub compression: Option<String>,
     pub io_config: Option<IOConfig>,
+    pub headers: Option<bool>,
+    pub delimiter: Option<String>,
+    // pub write_options: Option<&pyo3::Py<pyo3::PyAny>>,
 }
 
 #[cfg(feature = "python")]
@@ -154,6 +157,8 @@ impl OutputFileInfo {
         partition_cols: Option<Vec<ExprRef>>,
         compression: Option<String>,
         io_config: Option<IOConfig>,
+        headers: Option<bool>,
+        delimiter: Option<String>,
     ) -> Self {
         Self {
             root_dir,
@@ -162,6 +167,9 @@ impl OutputFileInfo {
             partition_cols,
             compression,
             io_config,
+            headers,
+            delimiter
+            // write_options,
         }
     }
 
