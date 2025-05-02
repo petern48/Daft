@@ -300,3 +300,25 @@ def test_csv_partitioned_write_with_some_empty_partitions(tmp_path, with_morsel_
 
     read_back = daft.read_csv(tmp_path.as_posix() + "/**/*.csv").sort("x").to_pydict()
     assert read_back == data
+
+
+def test_csv_write_no_headers(tmp_path, with_morsel_size):
+    data = {"x": [1, 2, 3], "y": ["a", "b", "c"]}
+
+    output_files = daft.from_pydict(data).write_csv(tmp_path, headers=False)
+
+    assert len(output_files) == 1
+
+    read_back = daft.read_csv(tmp_path.as_posix() + "/**/*.csv", has_headers=False).to_pydict()
+    assert all(x == y for x, y in zip(read_back.values(), data.values()))
+
+
+def test_csv_write_with_other_delimiter(tmp_path, with_morsel_size):
+    data = {"x": [1, 2, 3], "y": ["a", "b", "c"]}
+
+    output_files = daft.from_pydict(data).write_csv(tmp_path, delimiter="|")
+
+    assert len(output_files) == 1
+
+    read_back = daft.read_csv(tmp_path.as_posix() + "/**/*.csv", delimiter="|").to_pydict()
+    assert read_back == data
