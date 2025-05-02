@@ -44,6 +44,25 @@ def test_series_date_month_operation() -> None:
     assert input == months.to_pylist()
 
 
+def test_series_date_quarter_operation() -> None:
+    from datetime import date
+
+    def date_maker(m):
+        if m is None:
+            return None
+        return date(2023, m, 1)
+
+    input = list(range(1, 10)) + [None, 11, 12]
+
+    input_dates = list(map(date_maker, input))
+    s = Series.from_pylist(input_dates)
+    months = s.dt.month()
+
+    assert months.datatype() == DataType.uint32()
+
+    assert input == months.to_pylist()
+
+
 def test_series_date_year_operation() -> None:
     from datetime import date
 
@@ -242,6 +261,27 @@ def test_series_timestamp_month_operation(tz) -> None:
     assert months.datatype() == DataType.uint32()
 
     assert input == months.to_pylist()
+
+
+@pytest.mark.parametrize("tz", [None, "UTC", "+08:00", "Asia/Singapore"])
+def test_series_timestamp_quarter_operation(tz) -> None:
+    from datetime import datetime
+
+    def ts_maker(m):
+        if m is None:
+            return None
+        return datetime(2023, m, 1, 23, 1, 1)
+
+    input = list(range(1, 10)) + [None, 11, 12]
+    expected = [(m + 2) // 3 if m is not None else None for m in input]
+
+    input_ts = list(map(ts_maker, input))
+    s = Series.from_pylist(input_ts).cast(DataType.timestamp(TimeUnit.ms(), timezone=tz))
+    quarters = s.dt.quarter()
+
+    assert quarters.datatype() == DataType.uint32()
+
+    assert expected == quarters.to_pylist()
 
 
 @pytest.mark.parametrize("tz", [None, "UTC", "+08:00", "Asia/Singapore"])

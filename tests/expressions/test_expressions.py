@@ -313,6 +313,15 @@ def test_repr_functions_month() -> None:
     assert repr_out == repr(copied)
 
 
+def test_repr_functions_quarter() -> None:
+    a = col("a")
+    y = a.dt.quarter()
+    repr_out = repr(y)
+    assert repr_out == "quarter(col(a))"
+    copied = copy.deepcopy(y)
+    assert repr_out == repr(copied)
+
+
 def test_repr_functions_year() -> None:
     a = col("a")
     y = a.dt.year()
